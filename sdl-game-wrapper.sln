@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29920.165
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sdl-game-wrapper", "sdl-game-wrapper\sdl-game-wrapper.vcxproj", "{F4CD550C-0BFC-4940-A29E-696ACD236C91}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F4CD550C-0BFC-4940-A29E-696ACD236C91}.Debug|x64.ActiveCfg = Debug|x64
+		{F4CD550C-0BFC-4940-A29E-696ACD236C91}.Debug|x64.Build.0 = Debug|x64
+		{F4CD550C-0BFC-4940-A29E-696ACD236C91}.Debug|x86.ActiveCfg = Debug|Win32
+		{F4CD550C-0BFC-4940-A29E-696ACD236C91}.Debug|x86.Build.0 = Debug|Win32
+		{F4CD550C-0BFC-4940-A29E-696ACD236C91}.Release|x64.ActiveCfg = Release|x64
+		{F4CD550C-0BFC-4940-A29E-696ACD236C91}.Release|x64.Build.0 = Release|x64
+		{F4CD550C-0BFC-4940-A29E-696ACD236C91}.Release|x86.ActiveCfg = Release|Win32
+		{F4CD550C-0BFC-4940-A29E-696ACD236C91}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A8A1EAD7-6DB2-4308-85B8-B6AB50F4BBDE}
+	EndGlobalSection
+EndGlobal

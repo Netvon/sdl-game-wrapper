@@ -1,0 +1,13 @@
+#pragma once
+#include "sdl/conversions.h"
+#include "sdl/errors.h"
+#include "sdl/font.h"
+#include "sdl/font_manager.h"
+#include "sdl/image_manager.h"
+#include "sdl/lib.h"
+#include "sdl/lib_image.h"
+#include "sdl/lib_ttf.h"
+#include "sdl/renderer.h"
+#include "sdl/surface.h"
+#include "sdl/texture.h"
+#include "sdl/window.h"
