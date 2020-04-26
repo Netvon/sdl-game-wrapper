@@ -54,6 +54,21 @@ namespace sdl {
 			return { ddpi, hdpi, vdpi };
 		}
 
+		[[nodiscard]] static int get_number_of_render_drivers() {
+			return SDL_GetNumRenderDrivers();
+		}
+
+		[[nodiscard]] static SDL_RendererInfo get_render_driver_info(int index) {
+			SDL_RendererInfo info;
+			SDL_GetRenderDriverInfo(index, &info);
+
+			return info;
+		}
+
+		[[nodiscard]] static const char * get_video_driver(int index) {
+			return SDL_GetVideoDriver(index);
+		}
+
 		~lib() {
 			SDL_Quit();
 		}

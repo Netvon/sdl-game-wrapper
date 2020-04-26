@@ -119,7 +119,7 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>copy-build.bat $(SolutionDir) $(PlatformTarget) $(OutputPath) $(ProjectDir)</Command>
+      <Command>copy-build.bat $(SolutionDir) $(PlatformTarget) $(OutputPath) $(ProjectDir) $(Configuration)</Command>
       <Message>copy dlls</Message>
     </PreBuildEvent>
     <PostBuildEvent>
@@ -150,7 +150,7 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>copy-build.bat $(SolutionDir) $(PlatformTarget) $(OutputPath) $(ProjectDir)</Command>
+      <Command>copy-build.bat $(SolutionDir) $(PlatformTarget) $(OutputPath) $(ProjectDir) $(Configuration)</Command>
       <Message>copy dlls</Message>
     </PreBuildEvent>
     <PostBuildEvent>
@@ -185,7 +185,7 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>copy-build.bat $(SolutionDir) $(PlatformTarget) $(OutputPath) $(ProjectDir)</Command>
+      <Command>copy-build.bat $(SolutionDir) $(PlatformTarget) $(OutputPath) $(ProjectDir) $(Configuration)</Command>
       <Message>copy dlls</Message>
     </PreBuildEvent>
     <PostBuildEvent>
@@ -223,7 +223,7 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>copy-build.bat $(SolutionDir) $(PlatformTarget) $(OutputPath) $(ProjectDir)</Command>
+      <Command>copy-build.bat $(SolutionDir) $(PlatformTarget) $(OutputPath) $(ProjectDir) $(Configuration)</Command>
       <Message>copy dlls</Message>
     </PreBuildEvent>
     <PostBuildEvent>
@@ -250,13 +250,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\context.cpp" />
     <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\gl_game.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\game.h" />
     <ClInclude Include="include\game\components.h" />
     <ClInclude Include="include\game\components\transform.h" />
     <ClInclude Include="include\game\game.h" />
+    <ClInclude Include="include\game\gl_game.h" />
+    <ClInclude Include="include\gl\context.h" />
+    <ClInclude Include="include\gl\program.h" />
     <ClInclude Include="include\sdl.h" />
     <ClInclude Include="include\sdl\conversions.h" />
     <ClInclude Include="include\sdl\image_manager.h" />

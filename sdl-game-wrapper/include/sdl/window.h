@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <optional>
 #include "errors.h"
+#include "../gl/context.h"
 
 namespace sdl {
 	struct window {
@@ -106,5 +107,7 @@ namespace sdl {
 		}
 
 		SDL_Window* m_window_ptr = nullptr;
+
+		friend sgw::gl::context;
 	};
 }
