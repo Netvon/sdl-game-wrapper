@@ -24,7 +24,9 @@ robocopy ..\libs\SDL2_image-2.0.5\include %1\build\include /e
 robocopy ..\libs\glm-0.9.9.7\glm %1\build\include\glm /e 
 robocopy ..\libs\entt-3.3.2\src %1\build\include /e
 robocopy ..\libs\glad\%5 %1\build\include /e
-robocopy include %1\build\include\sgw /e
+robocopy ..\libs\stb_image-2.25 %1\build\include /e
+mklink /D %1\build\include\sgw %4\include
+::robocopy include %1\build\include\sgw /e
 goto :eof
 :usage
 @echo Usage: %0 ^<SolutionDir^> ^<PlatformTarget^> ^<OutputPath^> ^<ProjectDir^>

@@ -1,39 +1,38 @@
-#pragma once
+#ifndef SGW_GL_CONTEXT_H
+#define SGW_GL_CONTEXT_H
 #include "../sdl/errors.h"
-#include <glad.h>
+
+#include <glad/glad.h>
 
 namespace sdl {
-	struct window;
+    struct window;
 }
 
-namespace sgw::gl {
+namespace sgw {
 
-	struct context {
+    struct context {
 
-		context() = default;
-		context(const context&) = delete;
-		context(context&& other) noexcept {
-			std::swap(m_gl_context, other.m_gl_context);
-		}
+        context()               = default;
+        context(const context&) = delete;
+        context(context&& other) noexcept { std::swap(m_gl_context, other.m_gl_context); }
 
-		context& operator=(const context&) = delete;
-		context& operator=(context&& other) noexcept {
-			std::swap(m_gl_context, other.m_gl_context);
-			return *this;
-		}
+        context& operator=(const context&) = delete;
+        context& operator                  =(context&& other) noexcept {
+            std::swap(m_gl_context, other.m_gl_context);
+            return *this;
+        }
 
-		explicit context(const sdl::window& window);
+        explicit context(const sdl::window& window);
 
-		~context() {
-			if (m_gl_context != nullptr) {
-				SDL_GL_DeleteContext(m_gl_context);
-			}
-		}
+        ~context() = default;
 
-		void make_current(const sdl::window& window) const;
-		static void set_enable(unsigned int value);
+        void make_current(const sdl::window& window) const;
+        static void set_enable(unsigned int value);
 
-	private:
-		SDL_GLContext m_gl_context = nullptr;
-	};
+        [[nodiscard]] SDL_GLContext get_ptr() const noexcept { return m_gl_context; }
+
+    private:
+        SDL_GLContext m_gl_context = nullptr;
+    };
 }
+#endif // SGW_GL_CONTEXT_H

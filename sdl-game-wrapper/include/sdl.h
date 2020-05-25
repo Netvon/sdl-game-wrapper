@@ -1,4 +1,3 @@
-#pragma once
 #include "sdl/conversions.h"
 #include "sdl/errors.h"
 #include "sdl/font.h"

@@ -4,7 +4,8 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 ## SDL GAME WRAPPER
-assets/
+assets/fonts/
+assets/scripts/
 build/
 
 [Ll]ibs/*
@@ -345,3 +346,4 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/examples/opengl/imgui.ini
