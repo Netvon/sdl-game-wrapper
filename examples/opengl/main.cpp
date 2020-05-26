@@ -73,13 +73,21 @@ struct game : sgw::game {
 
 	void game_draw() override
 	{
-
 		if (m_mesh_changed) {
 			glActiveTexture(GL_TEXTURE0);
-			m_texture.bind();
-			m_prog.use();
+			//m_texture.bind();
+			//m_prog.use();
 			m_quad_mesh.bind();
 			m_sprite_data.bind();
+
+			sgw::bind_buffer(m_sprite_data, 0);
+
+			m_screen_prog.use();
+			m_screen_prog.set("texture1", 0);
+
+			m_prog.use();
+			m_prog.set("texture1", 0);
+			
 
 			m_mesh_changed = false;
 		}
@@ -87,6 +95,7 @@ struct game : sgw::game {
 		if (m_view_changed) {
 			try
 			{
+				m_prog.use();
 				m_prog.set("projection", m_projection);
 				m_prog.set("view", m_view);
 
@@ -102,55 +111,38 @@ struct game : sgw::game {
 			}
 		}
 
+		use_sprite();
 
-		//GLint resource_count = 0;
-		//GLint max_name_length = 0;
-		//glGetProgramInterfaceiv(m_prog.get_id(), GL_SHADER_STORAGE_BLOCK, GL_ACTIVE_RESOURCES, &resource_count);
-		//glGetProgramInterfaceiv(m_prog.get_id(), GL_SHADER_STORAGE_BLOCK, GL_MAX_NAME_LENGTH, &max_name_length);
-
-		//for (GLint i = 0; i < resource_count; i++)
-		//{
-		//	std::string temp;
-		//	GLint name_size = 0;
-		//	glGetProgramResourceName(m_prog.get_id(), GL_SHADER_STORAGE_BLOCK, i, max_name_length, &name_size, nullptr);
-		//	temp.resize(name_size);
-		//	glGetProgramResourceName(m_prog.get_id(), GL_SHADER_STORAGE_BLOCK, i, max_name_length, nullptr, temp.data());
-		//	auto index = glGetProgramResourceIndex(m_prog.get_id(), GL_SHADER_STORAGE_BLOCK, temp.c_str());
-
-		//	glShaderStorageBlockBinding()
-
-		//	std::cout << "Resource: " << temp << "\t@index: " << index <<'\n';
-		//}
-
-		//m_mesh.bind();
-		//m_sprite_data.bind();
-		//glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, m_colors.get_id());
-		//glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_sprite_data.get_id());
-
-		//m_mesh.bind_ssbo();
-		//m_mesh.draw();
 		m_frame_buffer.bind();
+
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_DEPTH_TEST);
+		glClearColor(0.1F, 0.25F, 0.5F, 1.0F);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		m_quad_mesh.draw_instanced(m_sprite_amount, sgw::mesh::draw_operation_buffer_handling::manual_bind_and_unbind);
+
 		m_frame_buffer.unbind();
 
-		//sgw::draw_mesh_instanced(m_mesh, GL_TRIANGLES, m_body_amount);
+		use_screen_quad();
 
-		//if constexpr (enable_compute) {
-		//	m_compute_velocity.use();
-		//	m_compute_velocity.set("time_step", get_delta_time());
-		//	m_mesh.bind_ssbo();
-		//	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, m_physics.get_id());
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_CULL_FACE);
+		glClearColor(1.0F, 1.0F, 1.0F, 1.0F);
+		glClear(GL_COLOR_BUFFER_BIT);
 
-		//	glDispatchCompute(m_body_amount, m_body_amount, 1);
-
-		//	m_compute_position.use();
-		//	m_mesh.bind_ssbo();
-		//	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, m_physics.get_id());
-
-		//	glDispatchCompute(m_body_amount, 1, 1);
-		//}
-
+		m_quad_mesh.draw_instanced(1, sgw::mesh::draw_operation_buffer_handling::manual_bind_and_unbind);
 		imgui_draw();
+	}
+
+	void use_sprite() const {
+		m_texture.bind();
+		m_prog.use();
+	}
+
+	void use_screen_quad() const {
+		m_frame_buffer.get_texture().bind();
+		m_screen_prog.use();
 	}
 
 	void imgui_draw()
@@ -469,6 +461,11 @@ struct game : sgw::game {
 				shader::create_and_compile_from_file(shader::fragment_type, "assets/shaders/sprite_shader.fragment.glsl")
 			);
 
+			m_screen_prog = program::create_and_link(
+				shader::create_and_compile_from_file(shader::vertex_type, "assets/shaders/screen_texture.vertex.glsl"),
+				shader::create_and_compile_from_file(shader::fragment_type, "assets/shaders/screen_texture.fragment.glsl")
+			);
+
 			std::vector<sprite_data> sprite_data_list;
 
 			auto [w, h] = get_window().get_window_size<std::pair<float, float>>();
@@ -513,15 +510,21 @@ struct game : sgw::game {
 				sgw::texture_filtering::nearest,
 				sgw::texture_mipmap::enable);
 
-			m_prog.use();
-			m_prog.set("texture1", 0);
+			//m_prog.use();
+			//m_prog.set("texture1", 0);
 			update_projection_and_view();
 
 			m_frame_buffer = sgw::frame_buffer::make(1280, 720);
 
+			auto status = m_frame_buffer.get_status();
+
+			if (!m_frame_buffer.is_valid()) {
+				throw std::runtime_error("Framebuffer incomplete");
+			}
+
 			std::cout << "Mesh and Program created\n";
 
-			sgw::bind_buffer(m_sprite_data, 0);
+			//sgw::bind_buffer(m_sprite_data, 0);
 		}
 		catch (const sgw::shader_compile_error& ex)
 		{
@@ -555,6 +558,7 @@ struct game : sgw::game {
 	}
 
 	program m_prog;
+	program m_screen_prog;
 	sgw::mesh m_quad_mesh;
 	texture m_texture;
 	sgw::frame_buffer m_frame_buffer;
@@ -577,17 +581,18 @@ struct game : sgw::game {
 
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) {
-	sgw::game_parameters params{
+	constexpr sgw::game_parameters params{
 		.sdl_lib_flags = sdl::lib::init_everything,
 		.initial_window_title = "opengl example",
 		.window_x = sdl::window::position_centered,
 		.window_y = sdl::window::position_centered,
 		.window_w = 1280,
 		.window_h = 720,
-		.window_flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
+		.window_flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE,
+		.gl_auto_clear = false
 	};
 
-	demo_params dp{
+	constexpr demo_params dp{
 		.sprite_amount = static_cast<std::size_t>(1E5)
 	};
 

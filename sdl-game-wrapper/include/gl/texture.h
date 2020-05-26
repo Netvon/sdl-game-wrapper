@@ -116,7 +116,7 @@ namespace sgw {
             temp.bind();
 
             auto tex_format = static_cast<GLint>(format);
-            auto filter = GL_LINEAR;
+            auto filter     = GL_LINEAR;
             if (filtering == texture_filtering::nearest) { filter = GL_NEAREST; }
 
             glTexParameteri(texture_target_gl, GL_TEXTURE_MIN_FILTER, filter);
@@ -146,6 +146,7 @@ namespace sgw {
         void unbind() const { glBindTexture(GL_TEXTURE_2D, 0); }
 
         [[nodiscard]] id get_id() const noexcept { return m_image; }
+        [[nodiscard]] bool is_valid() const noexcept { return glIsTexture(m_image); }
 
     private:
         id m_image{};

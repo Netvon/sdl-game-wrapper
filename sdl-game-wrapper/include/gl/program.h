@@ -100,7 +100,7 @@ namespace sgw {
 
         [[nodiscard]] int get_uniform_location(const char* name) const { return glGetUniformLocation(m_program, name); }
 
-        [[nodiscard]] unsigned int get_resource_location(const char* name, unsigned int program_interface) {
+        [[nodiscard]] unsigned int get_resource_location(const char* name, unsigned int program_interface) const {
             return glGetProgramResourceIndex(m_program, program_interface, name);
         }
 
@@ -112,7 +112,7 @@ namespace sgw {
         }
 
         template <typename Type>
-        void set(const char* name, const Type& value) const {
+        void set(const char* name, Type value) const {
             auto location = get_uniform_location(name);
 
             if (location == -1) { throw unknown_uniform_error(name); }
@@ -154,8 +154,8 @@ namespace sgw {
         }
 
         template <typename Type>
-        void set(const std::string& name, const Type& value) const {
-            set(name.c_str(), value);
+        void set(const std::string& name, Type&& value) const {
+            set(name.c_str(), std::forward(value));
         }
 
     private:

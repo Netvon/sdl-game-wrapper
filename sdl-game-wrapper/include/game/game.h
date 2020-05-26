@@ -45,6 +45,7 @@ namespace sgw {
         int window_h                          = default_window_h;
 #ifdef SGW_USE_OPENGL
         Uint32 window_flags = SDL_WINDOW_OPENGL;
+        bool gl_auto_clear  = true;
 #else
         Uint32 window_flags;
         Uint32 renderer_flags;
@@ -72,6 +73,7 @@ namespace sgw {
             ,
 #ifdef SGW_USE_OPENGL
             m_gl_context(m_window)
+            , m_gl_auto_clear(params.gl_auto_clear)
             ,
 #else
             m_renderer(m_window, -1, params.renderer_flags)
@@ -159,6 +161,7 @@ namespace sgw {
         double m_delta_time = 0.0;
 #ifdef SGW_USE_OPENGL
         glm::vec4 m_clear_color{ 0.1F, 0.1F, 0.1F, 1.F };
+        bool m_gl_auto_clear;
 #endif // SGW_USE_OPENGL
 
         virtual void game_logic() = 0;
@@ -174,8 +177,10 @@ namespace sgw {
 
         virtual void draw() {
 #ifdef SGW_USE_OPENGL
-            glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            if (m_gl_auto_clear) {
+                glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            }
             game_draw();
             m_window.gl_swap_window();
 #else
